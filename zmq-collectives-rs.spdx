@@ -1,0 +1,6 @@
+SPDXVersion: SPDX-2.1
+DataLicense: CC0-1.0
+PackageName: zmq-collectives-rs
+PackageOriginator: Christopher Taylor
+PackageHomePage: https://github.com/ct-clmsn/zmq-collectives-rs
+PackageLicenseDeclared: BSL-1.0
