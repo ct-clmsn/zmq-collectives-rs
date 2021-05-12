@@ -129,7 +129,7 @@ pub mod zmq_collectives {
                             let connect_address_str = param.addresses.get(irank).unwrap();
                             self.req.connect( &("tcp://".to_string() + connect_address_str) ).unwrap();
 
-                            // clears the server's ZMQ_ROUTER_ID from ZMQ_PROBE
+                            // clears the server's ZMQ_ROUTER_ID data from ZMQ_PROBE
                             //
                             self.req.recv_bytes(0).unwrap(); 
                             self.req.recv_bytes(0).unwrap();
@@ -232,8 +232,12 @@ pub mod zmq_collectives {
         }
 
         fn barrier(&self) {
+            // barrier implementation consists of a broadcast
+            // followed by a reduction
+            //
             let mut v : i32 = 1;
             self.broadcast(&mut v);
+
             let v : Vec<i32> = vec![1,1];
             let rv = self.reduce(0, |x,y| x + y, v);
             if !rv.is_ok() {
