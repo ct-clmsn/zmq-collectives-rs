@@ -57,9 +57,17 @@ ability of 0MQ to handle thread counts (inproc backend)
 over 1024. ipc and tcp backends can scale further
 because both utilize 2 file descriptors.
 
-The tcp backend provided by this library, ZMQ_ROUTER
-sockets are used and *should* scale to a larger set of
-machines than 1024 or 2048.
+tcp is a "chatty" protocol; tcp requires round trips
+between clients and servers during the data transmission
+exchange to ensure data is communicated correctly. The
+use of this protocol makes it less than ideal for jobs
+requiring high performance. However, it's provided in
+0MQ and makes for a reasonable place to plant a flag and
+provide an implementation.
+
+The tcp backend provided by this library uses ZMQ_ROUTER
+sockets and *should* scale to sets of process and machine
+combinations greater than 1024 or 2048.
 
 == License ==
 
