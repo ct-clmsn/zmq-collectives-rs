@@ -50,24 +50,39 @@ maps to 127.0.0.1:5556.
 
 0MQ uses file descriptors to handle communication and
 asynchrony control. There is a GNU/Linux kernel
-configurable ~2063 limit on the number of file
+configurable ~2063 default limit on the number of file
 descriptors a user process is authorized to open during
-it's lifetime. This places a hard limitation on the
-ability of 0MQ to handle thread counts (inproc backend)
-over 1024. ipc and tcp backends can scale further
-because both utilize 2 file descriptors.
+it's lifetime.
+
+0MQ's dependency on limited operating system resources
+means there is an upperbound on parallelism for thread
+counts using the inproc backend over 1024. ipc and tcp
+backends can scale further because both utilize 2 file
+descriptors. The limitation gives users the opportunity
+to determine how many processes and machines are necessary
+to reach the scale or level of parallelism they require
+in a application's execution.
+
+0MQ's inproc backend uses shared memory to communicate.
+For performance sensitive applications, the overhead of
+serializing data, writing to shared memory, reading the
+data from shared memory, deserializing the data read from
+shared memory is unnecessary overhead when a pointer
+dereference could be used to achieve the same outcome.
 
 tcp is a "chatty" protocol; tcp requires round trips
 between clients and servers during the data transmission
 exchange to ensure data is communicated correctly. The
 use of this protocol makes it less than ideal for jobs
-requiring high performance. However, it's provided in
-0MQ and makes for a reasonable place to plant a flag and
-provide an implementation.
+requiring high performance. However, tcp is provided in
+0MQ and is universally accessible (tcp is a commodity
+protocol) and makes for a reasonable place to plant a
+flag for providing an implementation.
 
 The tcp backend provided by this library uses ZMQ_ROUTER
-sockets and *should* scale to sets of process and machine
-combinations greater than 1024 or 2048.
+sockets to handle requests and responses and *should*
+scale to sets of process and machine combinations greater
+than 1024 or 2048.
 
 == License ==
 
