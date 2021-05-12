@@ -5,7 +5,7 @@ using Robert van de Deijn's Binomial Tree scheduling in Rust
 using 0MQ (zeromq). Provides log2(N) algorithmic performance
 for each collective operation over N compute hosts.
 
-These algorithms are used in HPC (Supercomputing) libraries
+These algorithms are used in HPC (supercomputing) libraries
 and runtime systems like MPI and OpenSHMEM.
 
 == Algorithms Implemented ==
@@ -15,26 +15,22 @@ and runtime systems like MPI and OpenSHMEM.
 * Scatter
 * Gather
 
-== Notes ==
+== Configuring Distributed Programs ==
 
-Configurable with environment variables
+Environment variables are used to configure distributed
+runs of SPMD applications using this library. Each of
+these environment variables needs to be supplied to
+correctly run programs.
 
-ZMQ_COLLECTIVES_NRANKS
-ZMQ_COLLECTIVES_RANK
-ZMQ_COLLECTIVES_UUID
-ZMQ_COLLECTIVES_ADDRESSES
+* ZMQ_COLLECTIVES_NRANKS
+* ZMQ_COLLECTIVES_RANK
+* ZMQ_COLLECTIVES_ADDRESSES
 
-Configuring 0MQ inproc, ipc, tcp backends
+ZMQ_COLLECTIVES_NRANKS unsigned integer value indicating
+how many processes are running.
 
-inproc is provided for threads
-ipc is provided for single-host processes
-tcp is provided for multi-host processes
-
-			     backend
-ZMQ_COLLECTIVES_NRANKS       inproc, ipc, tcp
-ZMQ_COLLECTIVES_RANK         inproc, ipc, tcp
-ZMQ_COLLECTIVES_UUID         ipc, tcp
-ZMQ_COLLECTIVES_ADDRESSES    tcp
+ZMQ_COLLECTIVES_RANK unsigned integer value indicating
+the process this program represents.
 
 ZMQ_COLLECTIVES_ADDRESSES should contain a ',' delimited
 list of ip addresses and ports. The list length should be
@@ -50,6 +46,8 @@ ZMQ_COLLECTIVES_ADDRESSES=127.0.0.1:5555,127.0.0.1:5556
 In this example, Rank 0 maps to 127.0.0.1:5555 and Rank 1
 maps to 127.0.0.1:5556.
 
+== Notes ==
+
 0MQ uses file descriptors to handle communication and
 asynchrony control. There is a GNU/Linux kernel
 configurable ~2063 limit on the number of file
@@ -59,13 +57,17 @@ ability of 0MQ to handle thread counts (inproc backend)
 over 1024. ipc and tcp backends can scale further
 because both utilize 2 file descriptors.
 
+The tcp backend provided by this library, ZMQ_ROUTER
+sockets are used and *should* scale to a larger set of
+machines than 1024 or 2048.
+
 == License ==
 
 Boost Version 1.0
 
 == Date ==
 
-03MAY2021
+03MAY2021-11MAY2021
 
 == Author ==
 
