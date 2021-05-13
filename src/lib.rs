@@ -266,10 +266,7 @@ pub mod zmq_collectives {
                     let mut itr = (&in_beg).clone().skip(beg);
 
                     let mut subdata : Vec<DataItem> = Vec::with_capacity(end-beg);
-
-                    for _i in beg..end {
-                        subdata.push(*itr.next().unwrap());
-                    }
+                    (beg..end).for_each(| _i | subdata.push(*itr.next().unwrap()) );
 
                     self.send(self.rank+k, subdata);
                 }
