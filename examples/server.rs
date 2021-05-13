@@ -18,6 +18,7 @@ fn main() {
     let p = Params::new();
     let mut be = TcpBackend::new(&p);
     be.initialize(&p);
+
     {
         let mut val : i32 = 0;
 
@@ -64,6 +65,20 @@ fn main() {
         
         if be.rank() == 0 {
             println!("{}", reduc_vec.unwrap());
+        }
+    }
+
+    be.barrier();
+
+    {
+        let ivalues : Vec<i32> = vec![1,1,1,1];
+        let mut ovalues : Vec<i32> = vec![0,0];
+        be.scatter(ivalues.iter(), ivalues.len(), &mut ovalues.iter_mut());
+        
+        if be.rank() != 0 {
+            for iv in ovalues {
+                println!("{}", iv);
+            }
         }
     }
 

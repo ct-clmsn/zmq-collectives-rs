@@ -66,18 +66,21 @@ pub mod zmq_collectives {
     }
 
     pub trait Collectives {
+
         fn broadcast< Data : serde::ser::Serialize + serde::de::DeserializeOwned + Copy >(&self, data : &mut Data);
-        fn reduce< DataItem, Data, F >(&self, init : DataItem, f : F, data : Data ) -> Result<DataItem, std::io::Error>
+
+        fn reduce<DataItem, Data, F >(&self, init : DataItem, f : F, data : Data ) -> Result<DataItem, std::io::Error>
             where DataItem : serde::ser::Serialize + serde::de::DeserializeOwned + Clone + Copy,
                   Data : std::iter::IntoIterator<Item = DataItem> + serde::ser::Serialize + serde::de::DeserializeOwned + Clone,
                   F : Fn(DataItem, Data::Item) -> DataItem + Clone;
-        fn barrier(&self);
-        /*
-        fn gather< Data : serde::ser::Serialize + serde::de::DeserializeOwned + Clone + Iterator >(&self, data : Data);
-        fn scatter< Data : serde::ser::Serialize + serde::de::DeserializeOwned >(&self, data : Data);
-        */
-    }
 
+        fn barrier(&self);
+
+        fn scatter< 'a, DataItem >(&self, in_beg : std::slice::Iter<'a, DataItem>, in_size : usize, out : &mut std::slice::IterMut<DataItem> )
+            where DataItem : serde::ser::Serialize + serde::de::DeserializeOwned + Clone + Copy + std::fmt::Display;
+
+        //fn gather< Data : serde::ser::Serialize + serde::de::DeserializeOwned + Clone + Iterator >(&self, data : Data) -> Data;
+    }
  
     pub struct TcpBackend {
         nranks : usize,
@@ -90,9 +93,8 @@ pub mod zmq_collectives {
     impl TcpBackend {
         pub fn new(param : & Params) -> Self {
             let ctx_ = zmq::Context::new();
-
             let rep_ = ctx_.socket(zmq::ROUTER).unwrap();
-            let req_ = ctx_.socket(zmq::ROUTER).unwrap(); //: Vec<zmq::Socket> = (0..addresses_vec.len()).into_iter().map(| _ | ctx_.socket(zmq::REQ).unwrap()).collect();
+            let req_ = ctx_.socket(zmq::ROUTER).unwrap();
 
             Self{nranks : param.nranks, rank : param.rank, ctx : ctx_, rep : rep_, req : req_}
         }
@@ -175,6 +177,7 @@ pub mod zmq_collectives {
     }
 
     impl Collectives for TcpBackend {
+
         fn broadcast< Data : serde::ser::Serialize + serde::de::DeserializeOwned + Copy >(&self, data : &mut Data) {
             let depth : usize = (self.nranks as f64).log2().ceil() as usize;
             let mut k : usize = self.nranks / 2;
@@ -242,6 +245,47 @@ pub mod zmq_collectives {
             let rv = self.reduce(0, |x,y| x + y, v);
             if !rv.is_ok() {
                 panic!("TcpBackend::barrier error on rank!");
+            }
+        }
+
+        fn scatter< 'a, DataItem >(&self, in_beg : std::slice::Iter<'a, DataItem>, in_size : usize, out : &mut std::slice::IterMut<DataItem> )
+            where DataItem : serde::ser::Serialize + serde::de::DeserializeOwned + Clone + Copy + std::fmt::Display {
+
+            let depth : usize = (self.nranks as f64).log2().ceil() as usize;
+            let block_size : usize = in_size / self.nranks;
+            let k : usize = self.nranks / 2;
+            let mut not_received : bool = true; 
+
+            for _d in 0..depth {
+                let twok = 2 * k;
+                if (self.rank % twok) == 0 {
+                    let beg : usize = ((self.rank + k) % self.nranks) * block_size;
+                    let end : usize = (self.nranks - (self.rank % self.nranks)) * block_size;
+
+                    let mut itr = (&in_beg).clone().skip(beg);
+
+                    let mut subdata : Vec<DataItem> = Vec::with_capacity(end-beg);
+
+                    for _i in beg..end {
+                        subdata.push(*itr.next().unwrap());
+                    }
+
+                    self.send(self.rank+k, subdata);
+                }
+                else if not_received && ((self.rank % twok) == k) {
+                    let res : Result< Vec<DataItem>, std::io::Error > = self.recv(self.rank-k);
+
+                    if res.is_err() {
+                        panic!("TcpBackend::recv error on rank!");
+                    }
+
+                    let resv = &res.unwrap();
+                    let mut resitr = resv.iter();
+
+                    out.for_each(| oval | *oval = *resitr.next().unwrap() );
+
+                    not_received = false;
+                }
             }
         }
     }

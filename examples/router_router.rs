@@ -16,17 +16,25 @@ fn main() {
     client.set_probe_router(true);
     client.connect("tcp://127.0.0.1:5555"); 
 
+    // clear client handshake from ZMQ_PROBE
+    //
     server.recv_bytes(0);
     let sr = server.recv_bytes(0).unwrap();
     println!("srcv\t{}", String::from_utf8(sr).unwrap());
 
+    // clear server handshake from ZMQ_PROBE
+    //
     client.recv_bytes(0);
     let car = client.recv_bytes(0).unwrap();
     println!("crcv\t{}", String::from_utf8(car).unwrap());
 
+    // server sending data
+    //
     server.send("x", zmq::SNDMORE);
     server.send("Hello", 0);
 
+    // client recieve data
+    //
     println!("{}", client.recv_bytes(0).unwrap().len());
     let cbr = client.recv_bytes(0).unwrap();
     println!("{}", String::from_utf8(cbr).unwrap());
