@@ -75,10 +75,8 @@ fn main() {
         let mut ovalues : Vec<i32> = vec![0,0];
         be.scatter(ivalues.iter(), ivalues.len(), &mut ovalues.iter_mut());
         
-        if be.rank() != 0 {
-            for iv in ovalues {
-                println!("{}", iv);
-            }
+        for iv in ovalues {
+            println!("{}", iv);
         }
     }
 

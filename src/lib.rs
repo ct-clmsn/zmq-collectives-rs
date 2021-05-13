@@ -77,9 +77,10 @@ pub mod zmq_collectives {
         fn barrier(&self);
 
         fn scatter< 'a, DataItem >(&self, in_beg : std::slice::Iter<'a, DataItem>, in_size : usize, out : &mut std::slice::IterMut<DataItem> )
-            where DataItem : serde::ser::Serialize + serde::de::DeserializeOwned + Clone + Copy + std::fmt::Display;
+            where DataItem : serde::ser::Serialize + serde::de::DeserializeOwned + Clone + Copy;
 
-        //fn gather< Data : serde::ser::Serialize + serde::de::DeserializeOwned + Clone + Iterator >(&self, data : Data) -> Data;
+        fn gather< 'a, DataItem >(&self, in_beg : std::slice::Iter<'a, DataItem>, in_size : usize, out : &mut std::slice::IterMut<DataItem> )
+            where DataItem : serde::ser::Serialize + serde::de::DeserializeOwned + Clone + Copy;
     }
  
     pub struct TcpBackend {
@@ -249,7 +250,7 @@ pub mod zmq_collectives {
         }
 
         fn scatter< 'a, DataItem >(&self, in_beg : std::slice::Iter<'a, DataItem>, in_size : usize, out : &mut std::slice::IterMut<DataItem> )
-            where DataItem : serde::ser::Serialize + serde::de::DeserializeOwned + Clone + Copy + std::fmt::Display {
+            where DataItem : serde::ser::Serialize + serde::de::DeserializeOwned + Clone + Copy {
 
             let depth : usize = (self.nranks as f64).log2().ceil() as usize;
             let block_size : usize = in_size / self.nranks;
@@ -287,8 +288,18 @@ pub mod zmq_collectives {
                     not_received = false;
                 }
             }
+
+            if self.rank() < 1 {
+                let mut citr = in_beg.clone();
+                out.take(block_size).for_each(| oval | *oval = *citr.next().unwrap() );
+            }
+        }
+
+        fn gather< 'a, DataItem >(&self, in_beg : std::slice::Iter<'a, DataItem>, in_size : usize, out : &mut std::slice::IterMut<DataItem> )
+            where DataItem : serde::ser::Serialize + serde::de::DeserializeOwned + Clone + Copy {
         }
     }
+
 }
 
 #[cfg(test)]
