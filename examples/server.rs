@@ -16,7 +16,7 @@ ZMQ_COLLECTIVES_ADDRESSES=127.0.0.1:5555,127.0.0.1:5556 ZMQ_COLLECTIVES_NRANKS=2
 fn main() {
     
     let p = Params::new();
-    let mut be = TcpBackend::new(&p);
+    let be = TcpBackend::new(&p);
     be.initialize(&p);
 
     {
