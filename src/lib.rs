@@ -67,7 +67,8 @@ pub mod zmq_collectives {
 
     pub trait Collectives {
 
-        fn broadcast< Data : serde::ser::Serialize + serde::de::DeserializeOwned + Copy >(&self, data : &mut Data);
+        fn broadcast<Data>(&self, data : &mut Data)
+           where Data : serde::ser::Serialize + serde::de::DeserializeOwned + Clone + Copy;  
 
         fn reduce<DataItem, Data, F >(&self, init : DataItem, f : F, data : Data ) -> Result<DataItem, std::io::Error>
             where DataItem : serde::ser::Serialize + serde::de::DeserializeOwned + Clone + Copy,
@@ -179,7 +180,8 @@ pub mod zmq_collectives {
 
     impl Collectives for TcpBackend {
 
-        fn broadcast< Data : serde::ser::Serialize + serde::de::DeserializeOwned + Copy >(&self, data : &mut Data) {
+        fn broadcast<Data>(&self, data : &mut Data)
+           where Data : serde::ser::Serialize + serde::de::DeserializeOwned + Clone + Copy {
             let depth : usize = (self.nranks as f64).log2().ceil() as usize;
             let mut k : usize = self.nranks / 2;
             let mut not_recv : bool = true; 
