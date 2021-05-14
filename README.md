@@ -3,7 +3,8 @@
 <!--   Distributed under the Boost Software License, Version 1.0. (See accompanying -->
 <!--   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)        -->
 
-# [zmq-collectives-rs](https://github.com/ct-clmsn/zmq-collectives-rs) Library implements [SPMD](https://en.m.wikipedia.org/wiki/SPMD) (single program many data) collective communication algorithms (Robert van de Geijn's Binomial Tree)
+# [zmq-collectives-rs](https://github.com/ct-clmsn/zmq-collectives-rs)
+Library implements [SPMD](https://en.m.wikipedia.org/wiki/SPMD) (single program many data) collective communication algorithms (Robert van de Geijn's Binomial Tree)
 in Rust using 0MQ. Provides log2(N) algorithmic performance
 for each collective operation over N compute hosts.
 
