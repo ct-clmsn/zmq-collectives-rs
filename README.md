@@ -55,7 +55,7 @@ maps to 127.0.0.1:5556.
 0MQ uses sockets/file descriptors (same thing) to
 handle communication and asynchrony control. There
 is a GNU/Linux kernel configurable ~2063 default
-limit on the number of file descriptors a user
+limit on the number of file descriptors/sockets a user
 process is authorized to open during execution. The
 TcpBackend uses 2 file descriptors/sockets. In 0MQ
 terms these sockets are ZMQ_ROUTER.
