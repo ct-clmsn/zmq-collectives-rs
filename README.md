@@ -31,7 +31,8 @@ correctly run programs.
 * ZMQ_COLLECTIVES_ADDRESSES
 
 ZMQ_COLLECTIVES_NRANKS unsigned integer value indicating
-how many processes are running.
+how many processes (instances or copies of the program)
+are running.
 
 ZMQ_COLLECTIVES_RANK unsigned integer value indicating
 the process instance this program represents. This is
