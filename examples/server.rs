@@ -20,6 +20,7 @@ fn main() {
     be.initialize(&p);
 
     {
+        println!("broadcast");
         let mut val : i32 = 0;
 
         if be.rank() == 0 {
@@ -36,6 +37,7 @@ fn main() {
     be.barrier();
 
     {
+        println!("broadcast");
         let mut val : i32 = 0;
 
         if be.rank() == 0 {
@@ -49,6 +51,7 @@ fn main() {
     be.barrier();
 
     {
+        println!("reduce");
         let values : Vec<i32> = vec![1,1,1,1];
         let reduc_vec = be.reduce(0, |x, y| x + y, values);
         
@@ -60,6 +63,7 @@ fn main() {
     be.barrier();
 
     {
+        println!("reduce");
         let values : Vec<i32> = vec![1,1,1,1];
         let reduc_vec = be.reduce(0, |x, y| x + y, values);
         
@@ -71,9 +75,23 @@ fn main() {
     be.barrier();
 
     {
+        println!("scatter");
         let ivalues : Vec<i32> = vec![1,1,1,1];
         let mut ovalues : Vec<i32> = vec![0,0];
         be.scatter(ivalues.iter(), ivalues.len(), &mut ovalues.iter_mut());
+        
+        for iv in ovalues {
+            println!("{}", iv);
+        }
+    }
+
+    be.barrier();
+
+    {
+        println!("gather");
+        let ivalues : Vec<i32> = vec![1,1];
+        let mut ovalues : Vec<i32> = vec![0,0,0,0];
+        be.gather(&mut ivalues.iter(), ivalues.len(), &mut ovalues.iter_mut());
         
         for iv in ovalues {
             println!("{}", iv);
