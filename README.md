@@ -6,8 +6,8 @@
 # [zmq-collectives-rs](https://github.com/ct-clmsn/zmq-collectives-rs)
 This library implements a [SPMD](https://en.m.wikipedia.org/wiki/SPMD) (single program
 multiple data) model and collective communication algorithms (Robert van de Geijn's
-Binomial Tree) in Rust using 0MQ. Provides log2(N) algorithmic performance for each
-collective operation over N compute hosts.
+Binomial Tree) in Rust using [0MQ](https://zeromq.org). Provides log2(N) algorithmic
+performance for each collective operation over N compute hosts.
 
 These algorithms are used in HPC (high performance computing/supercomputing) libraries
 and runtime systems like MPI and OpenSHMEM.
