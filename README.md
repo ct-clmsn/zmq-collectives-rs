@@ -1,4 +1,9 @@
-=== zmq-collectives-rs ===
+<!-- Copyright (c) 2021 Christopher Taylor                                          -->
+<!--                                                                                -->
+<!--   Distributed under the Boost Software License, Version 1.0. (See accompanying -->
+<!--   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)        -->
+
+# zmq-collectives-rs
 
 Library implements SPMD (single program many data) collective
 communication algorithms (Robert van de Deijn's Binomial Tree)
@@ -8,7 +13,7 @@ for each collective operation over N compute hosts.
 These algorithms are used in HPC (high peformance computing/
 supercomputing) and runtime systems like MPI and OpenSHMEM.
 
-== Algorithms Implemented ==
+### Algorithms Implemented
 
 * Broadcast
 * Reduction
@@ -16,7 +21,7 @@ supercomputing) and runtime systems like MPI and OpenSHMEM.
 * Gather
 * Barrier
 
-== Configuring Distributed Programs ==
+### Configuring Distributed Programs
 
 Environment variables are used to configure distributed
 runs of SPMD applications using this library. Each of
@@ -47,7 +52,7 @@ ZMQ_COLLECTIVES_ADDRESSES=127.0.0.1:5555,127.0.0.1:5556
 In this example, Rank 0 maps to 127.0.0.1:5555 and Rank 1
 maps to 127.0.0.1:5556.
 
-== Notes ==
+### Notes
 
 0MQ uses sockets/file descriptors (same thing) to
 handle communication and asynchrony control. There
@@ -80,19 +85,19 @@ libzmq.a or libzmq.so would be installed in the directory:
 libzmq.pc can be found in the directory:
     $LIBZMQ_INSTALL_PREFIX_PATH/lib/pkgconfig
 
-== License ==
+### License
 
 Boost Version 1.0
 
-== Date ==
+### Date
 
 03MAY2021-11MAY2021
 
-== Author ==
+### Author
 
 Christopher Taylor
 
-== Dependencies ==
+### Dependencies
 
 * pkg-config
 * libzmq
