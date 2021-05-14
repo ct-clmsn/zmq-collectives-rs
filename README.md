@@ -34,7 +34,9 @@ ZMQ_COLLECTIVES_NRANKS unsigned integer value indicating
 how many processes are running.
 
 ZMQ_COLLECTIVES_RANK unsigned integer value indicating
-the process instance this program represents.
+the process instance this program represents. This is
+analogous to a user provided thread id. The value must
+be 0 or less than ZMQ_COLLECTIVES_NRANKS.
 
 ZMQ_COLLECTIVES_ADDRESSES should contain a ',' delimited
 list of ip addresses and ports. The list length should be
