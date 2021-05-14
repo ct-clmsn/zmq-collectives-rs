@@ -364,14 +364,3 @@ pub mod zmq_collectives {
     }
 
 }
-
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn it_works() {
-        //assert_eq!(2 + 2, 4);
-        use crate::zmq_collectives::{Backend, IpcBackend};
-        let be = IpcBackend::new();
-        //be.initialize();
-    }
-}
