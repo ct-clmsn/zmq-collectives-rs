@@ -4,11 +4,13 @@
 <!--   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)        -->
 
 # [zmq-collectives-rs](https://github.com/ct-clmsn/zmq-collectives-rs)
-This library implements [SPMD](https://en.m.wikipedia.org/wiki/SPMD) (single program multiple data) collective communication algorithms (Robert van de Geijn's Binomial Tree)
-in Rust using 0MQ. Provides log2(N) algorithmic performance
-for each collective operation over N compute hosts.
+This library implements a [SPMD](https://en.m.wikipedia.org/wiki/SPMD) (single program
+multiple data) model and collective communication algorithms (Robert van de Geijn's
+Binomial Tree) in Rust using 0MQ. Provides log2(N) algorithmic performance for each
+collective operation over N compute hosts.
 
-These algorithms are used in HPC (high peformance computing/supercomputing) and runtime systems like MPI and OpenSHMEM.
+These algorithms are used in HPC (high peformance computing/supercomputing) libraries
+and runtime systems like MPI and OpenSHMEM.
 
 ### Algorithms Implemented
 
@@ -53,9 +55,9 @@ In this example, Rank 0 maps to 127.0.0.1:5555 and Rank 1
 maps to 127.0.0.1:5556.
 
 HPC batch scheduling systems like [Slurm](https://en.m.wikipedia.org/wiki/Slurm_Workload_Manager),
-[TORQUE](https://en.m.wikipedia.org/wiki/TORQUE), etc.
-provide mechanisms to automatically define these variables
-when jobs are submitted.
+[TORQUE](https://en.m.wikipedia.org/wiki/TORQUE), [PBS](https://en.wikipedia.org/wiki/Portable_Batch_System),
+etc. provide mechanisms to automatically define these
+variables when jobs are submitted.
 
 ### Notes
 
