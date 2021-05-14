@@ -118,6 +118,11 @@ pub mod zmq_collectives {
 	    self.req.set_identity(self.rank.to_string().as_bytes()).unwrap();
             self.req.set_probe_router(true);
 
+            if param.addresses.len() != self.nranks {
+                panic!("TcpBackend::initialize Params address list lenght is not equal to TcpBackend.nranks");
+            }
+
+            /*
             for orank in 0..param.addresses.len() {
                 if orank == self.rank {
                     for irank in 0..param.addresses.len() {
@@ -139,6 +144,28 @@ pub mod zmq_collectives {
                             self.req.recv_bytes(0).unwrap();
                         }
                     }
+                }
+            }
+            */
+
+            for orank in 0..param.addresses.len() {
+                if orank == self.rank {
+                    for irank in 0..param.addresses.len() {
+			if irank != self.rank {
+                            let connect_address_str = param.addresses.get(irank).unwrap();
+                            self.req.connect( &("tcp://".to_string() + connect_address_str) ).unwrap();
+
+                            // clears the server's ZMQ_ROUTER_ID data from ZMQ_PROBE
+                            //
+                            self.req.recv_bytes(0).unwrap(); 
+                            self.req.recv_bytes(0).unwrap();
+                        }
+                    }
+
+                }
+                else {
+                    self.rep.recv_bytes(0).unwrap();
+                    self.rep.recv_bytes(0).unwrap();
                 }
             }
         }
