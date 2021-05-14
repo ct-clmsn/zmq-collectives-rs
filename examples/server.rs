@@ -91,7 +91,7 @@ fn main() {
         println!("gather");
         let ivalues : Vec<i32> = vec![1,1];
         let mut ovalues : Vec<i32> = vec![0,0,0,0];
-        be.gather(&mut ivalues.iter(), ivalues.len(), &mut ovalues.iter_mut());
+        be.gather(ivalues.iter(), ivalues.len(), &mut ovalues.iter_mut());
         
         for iv in ovalues {
             println!("{}", iv);

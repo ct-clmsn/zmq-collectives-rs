@@ -80,7 +80,7 @@ pub mod zmq_collectives {
         fn scatter< 'a, DataItem >(&self, in_beg : std::slice::Iter<'a, DataItem>, in_size : usize, out : &mut std::slice::IterMut<DataItem> )
             where DataItem : serde::ser::Serialize + serde::de::DeserializeOwned + Clone + Copy;
 
-        fn gather< 'a, DataItem >(&self, in_beg : &mut std::slice::Iter<'a, DataItem>, in_size : usize, out : &mut std::slice::IterMut<DataItem> )
+        fn gather< 'a, DataItem >(&self, in_beg : std::slice::Iter<'a, DataItem>, in_size : usize, out : &mut std::slice::IterMut<DataItem> )
             where DataItem : serde::ser::Serialize + serde::de::DeserializeOwned + Clone + Copy;
     }
  
@@ -323,7 +323,7 @@ pub mod zmq_collectives {
             }
         }
 
-        fn gather< 'a, DataItem >(&self, in_beg : &mut std::slice::Iter<'a, DataItem>, in_size : usize, out : &mut std::slice::IterMut<DataItem> )
+        fn gather< 'a, DataItem >(&self, in_beg : std::slice::Iter<'a, DataItem>, in_size : usize, out : &mut std::slice::IterMut<DataItem> )
             where DataItem : serde::ser::Serialize + serde::de::DeserializeOwned + Clone + Copy {
 
             let depth : usize = (self.nranks as f64).log2().ceil() as usize;
@@ -331,28 +331,33 @@ pub mod zmq_collectives {
 
             let mut buf : Vec<DataItem> = Vec::new();
 
-            if self.rank() > 0 {
-                (0..in_size).for_each( | _i | buf.push( *in_beg.next().unwrap() ) );
-            }
+            {
+                let mut begitr = (&in_beg).clone();
 
-            for _d in 0..depth {
-                if (mask & self.rank()) == 0 {
-                   let child : usize = self.rank() | mask;
-                   if child < self.n_ranks() {
-                       let recvbuf : Vec<DataItem> = self.recv(child).unwrap();
-                       recvbuf.iter().for_each(| rb | buf.push(*rb) );
-                   }
-                }
-                else {
-                    let parent : usize = self.rank() & (!mask);
-                    self.send(parent, &buf);
+                if self.rank() > 0 {
+                    (0..in_size).for_each( | _i | buf.push( *begitr.next().unwrap() ) );
                 }
 
-                mask <<= 1;
+                for _d in 0..depth {
+                    if (mask & self.rank()) == 0 {
+                        let child : usize = self.rank() | mask;
+                        if child < self.n_ranks() {
+                            let recvbuf : Vec<DataItem> = self.recv(child).unwrap();
+                            recvbuf.iter().for_each(| rb | buf.push(*rb) );
+                        }
+                    }
+                    else {
+                        let parent : usize = self.rank() & (!mask);
+                        self.send(parent, &buf);
+                    }
+
+                    mask <<= 1;
+                }
             }
 
             if self.rank() < 1 {
-                in_beg.for_each(| iv | buf.insert(0, *iv) );
+                let mut begitr = (&in_beg).clone();
+                begitr.for_each(| iv | buf.insert(0, *iv) );
                 let mut bufitr = buf.iter();
                 out.for_each(| ov | *ov = *bufitr.next().unwrap() );
             }
