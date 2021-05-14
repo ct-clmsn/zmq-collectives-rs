@@ -53,6 +53,11 @@ ZMQ_COLLECTIVES_ADDRESSES=127.0.0.1:5555,127.0.0.1:5556
 In this example, Rank 0 maps to 127.0.0.1:5555 and Rank 1
 maps to 127.0.0.1:5556.
 
+HPC batch scheduling systems like [Slurm](https://en.m.wikipedia.org/wiki/Slurm_Workload_Manager),
+[TORQUE](https://en.m.wikipedia.org/wiki/TORQUE), etc.
+provide mechanisms to automatically define these variables
+when jobs are submitted.
+
 ### Notes
 
 0MQ uses sockets/file descriptors (same thing) to
