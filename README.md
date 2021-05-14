@@ -8,8 +8,7 @@ Library implements [SPMD](https://en.m.wikipedia.org/wiki/SPMD) (single program 
 in Rust using 0MQ. Provides log2(N) algorithmic performance
 for each collective operation over N compute hosts.
 
-These algorithms are used in HPC (high peformance computing/
-supercomputing) and runtime systems like MPI and OpenSHMEM.
+These algorithms are used in HPC (high peformance computing/supercomputing) and runtime systems like MPI and OpenSHMEM.
 
 ### Algorithms Implemented
 
