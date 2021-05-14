@@ -3,15 +3,12 @@
 <!--   Distributed under the Boost Software License, Version 1.0. (See accompanying -->
 <!--   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)        -->
 
-# zmq-collectives-rs
-
-Library implements SPMD (single program many data) collective
-communication algorithms (Robert van de Deijn's Binomial Tree)
+# [zmq-collectives-rs](https://github.com/ct-clmsn/zmq-collectives-rs)
+This library implements [SPMD](https://en.m.wikipedia.org/wiki/SPMD) (single program multiple data) collective communication algorithms (Robert van de Geijn's Binomial Tree)
 in Rust using 0MQ. Provides log2(N) algorithmic performance
 for each collective operation over N compute hosts.
 
-These algorithms are used in HPC (high peformance computing/
-supercomputing) and runtime systems like MPI and OpenSHMEM.
+These algorithms are used in HPC (high peformance computing/supercomputing) and runtime systems like MPI and OpenSHMEM.
 
 ### Algorithms Implemented
 
@@ -33,10 +30,13 @@ correctly run programs.
 * ZMQ_COLLECTIVES_ADDRESSES
 
 ZMQ_COLLECTIVES_NRANKS unsigned integer value indicating
-how many processes are running.
+how many processes (instances or copies of the program)
+are running.
 
 ZMQ_COLLECTIVES_RANK unsigned integer value indicating
-the process instance this program represents.
+the process instance this program represents. This is
+analogous to a user provided thread id. The value must
+be 0 or less than ZMQ_COLLECTIVES_NRANKS.
 
 ZMQ_COLLECTIVES_ADDRESSES should contain a ',' delimited
 list of ip addresses and ports. The list length should be
@@ -52,12 +52,17 @@ ZMQ_COLLECTIVES_ADDRESSES=127.0.0.1:5555,127.0.0.1:5556
 In this example, Rank 0 maps to 127.0.0.1:5555 and Rank 1
 maps to 127.0.0.1:5556.
 
+HPC batch scheduling systems like [Slurm](https://en.m.wikipedia.org/wiki/Slurm_Workload_Manager),
+[TORQUE](https://en.m.wikipedia.org/wiki/TORQUE), etc.
+provide mechanisms to automatically define these variables
+when jobs are submitted.
+
 ### Notes
 
 0MQ uses sockets/file descriptors (same thing) to
 handle communication and asynchrony control. There
 is a GNU/Linux kernel configurable ~2063 default
-limit on the number of file descriptors a user
+limit on the number of file descriptors/sockets a user
 process is authorized to open during execution. The
 TcpBackend uses 2 file descriptors/sockets. In 0MQ
 terms these sockets are ZMQ_ROUTER.
