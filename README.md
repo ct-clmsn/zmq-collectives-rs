@@ -100,8 +100,9 @@ Christopher Taylor
 ### Dependencies
 
 * pkg-config
-* libzmq
-* uuid
-* serde
-* bincode
-* zmq
+* [rust](https://www.rust-lang.org/)
+* [libzmq](https://github.com/zeromq/libzmq)
+* [uuid](https://github.com/uuid-rs/uuid)
+* [serde](https://github.com/serde-rs/serde)
+* [bincode](https://github.com/bincode-org/bincode)
+* [zmq](https://github.com/erickt/rust-zmq)
