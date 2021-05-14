@@ -9,7 +9,7 @@ multiple data) model and collective communication algorithms (Robert van de Geij
 Binomial Tree) in Rust using 0MQ. Provides log2(N) algorithmic performance for each
 collective operation over N compute hosts.
 
-These algorithms are used in HPC (high peformance computing/supercomputing) libraries
+These algorithms are used in HPC (high performance computing/supercomputing) libraries
 and runtime systems like MPI and OpenSHMEM.
 
 ### Algorithms Implemented
