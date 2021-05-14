@@ -6,7 +6,7 @@
 # zmq-collectives-rs
 
 Library implements SPMD (single program many data) collective
-communication algorithms (Robert van de Deijn's Binomial Tree)
+communication algorithms (Robert van de Geijn's Binomial Tree)
 in Rust using 0MQ. Provides log2(N) algorithmic performance
 for each collective operation over N compute hosts.
 
