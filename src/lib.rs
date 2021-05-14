@@ -5,11 +5,10 @@
 //  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 use std::env;
+use std::io::{Error, ErrorKind};
 use std::result;
-use std::time;
 use std::thread;
 use uuid;
-use std::io::{Error, ErrorKind};
 use serde::{Serialize, Deserialize};
 use bincode::{deserialize, serialize};
 use zmq;
