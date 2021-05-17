@@ -12,6 +12,8 @@ algorithmic performance for each collective operation over N compute hosts.
 These algorithms are used in HPC (high performance computing) / Supercomputing
 libraries and runtime systems like MPI and OpenSHMEM.
 
+Documentation for this library can be found on it's [wiki](https://github.com/ct-clmsn/zmq-collectives-rs/wiki).
+
 ### Algorithms Implemented
 
 * Broadcast
