@@ -9,8 +9,8 @@ multiple data) model and collective communication algorithms (Robert van de Geij
 Binomial Tree) in Rust using [0MQ](https://zeromq.org). The library provides log2(N)
 algorithmic performance for each collective operation over N compute hosts.
 
-These algorithms are used in HPC (high performance computing) / Supercomputing
-libraries and runtime systems like MPI and OpenSHMEM.
+Collective communication algorithms are used in HPC (high performance computing) / Supercomputing
+libraries and runtime systems such as [MPI](https://www.open-mpi.org) and [OpenSHMEM](http://openshmem.org).
 
 Documentation for this library can be found on it's [wiki](https://github.com/ct-clmsn/zmq-collectives-rs/wiki).
 
