@@ -6,11 +6,11 @@
 # [zmq-collectives-rs](https://github.com/ct-clmsn/zmq-collectives-rs)
 This library implements a [SPMD](https://en.m.wikipedia.org/wiki/SPMD) (single program
 multiple data) model and collective communication algorithms (Robert van de Geijn's
-Binomial Tree) in Rust using [0MQ](https://zeromq.org). Provides log2(N) algorithmic
-performance for each collective operation over N compute hosts.
+Binomial Tree) in Rust using [0MQ](https://zeromq.org). The library provides log2(N)
+algorithmic performance for each collective operation over N compute hosts.
 
-These algorithms are used in HPC (high performance computing/supercomputing) libraries
-and runtime systems like MPI and OpenSHMEM.
+These algorithms are used in HPC (high performance computing) / Supercomputing
+libraries and runtime systems like MPI and OpenSHMEM.
 
 ### Algorithms Implemented
 
@@ -20,27 +20,27 @@ and runtime systems like MPI and OpenSHMEM.
 * Gather
 * Barrier
 
-### Configuring Distributed Programs
+### Configuring Distributed Program Execution
 
-Environment variables are used to configure distributed
-runs of SPMD applications using this library. Each of
-these environment variables needs to be supplied to
-correctly run programs.
+This library requires the use of environment variables
+to configure distributed runs of SPMD applications.
+Each of the following environment variables needs to be
+supplied to correctly run programs:
 
 * ZMQ_COLLECTIVES_NRANKS
 * ZMQ_COLLECTIVES_RANK
 * ZMQ_COLLECTIVES_ADDRESSES
 
-ZMQ_COLLECTIVES_NRANKS unsigned integer value indicating
+ZMQ_COLLECTIVES_NRANKS - unsigned integer value indicating
 how many processes (instances or copies of the program)
 are running.
 
-ZMQ_COLLECTIVES_RANK unsigned integer value indicating
+ZMQ_COLLECTIVES_RANK - unsigned integer value indicating
 the process instance this program represents. This is
 analogous to a user provided thread id. The value must
 be 0 or less than ZMQ_COLLECTIVES_NRANKS.
 
-ZMQ_COLLECTIVES_ADDRESSES should contain a ',' delimited
+ZMQ_COLLECTIVES_ADDRESSES - should contain a ',' delimited
 list of ip addresses and ports. The list length should be
 equal to the integer value of ZMQ_COLLECTIVES_NRANKS. An
 example for a 2 rank application is below:
