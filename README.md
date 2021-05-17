@@ -59,7 +59,7 @@ maps to 127.0.0.1:5556.
 HPC batch scheduling systems like [Slurm](https://en.m.wikipedia.org/wiki/Slurm_Workload_Manager),
 [TORQUE](https://en.m.wikipedia.org/wiki/TORQUE), [PBS](https://en.wikipedia.org/wiki/Portable_Batch_System),
 etc. provide mechanisms to automatically define these
-variables when jobs are submitted.
+environment variables when jobs are submitted.
 
 ### Notes
 
